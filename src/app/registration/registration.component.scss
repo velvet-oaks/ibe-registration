@@ -1,0 +1,275 @@
+// form {
+// 	display: flex;
+// 	flex-direction: column;
+// 	gap: 1em;
+// 	padding: 1em
+// }
+
+// form mat-form-field {
+// 	width: 80%;
+// 	margin: auto
+// }
+
+// .info-wrapper,
+// .info {
+// 	width: 80%;
+// 	font-size: 12px;
+// }
+
+// .field-heading {
+// 	font-size: initial
+// }
+
+.heading-wrapper {
+	border-bottom: 2px solid #5e35b1;
+	margin: auto;
+	width: max-content
+}
+
+h1 {
+	text-align: center;
+}
+
+.container {
+	width: fit-content;
+	min-width: 270px;
+	height: 80vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 2em;
+	padding: 2em;
+	margin: auto;
+	background-color: whitesmoke;
+
+}
+
+.form-container {
+	width: 90%;
+	max-height: 80vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	margin: auto;
+	padding: 2em;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	background: whitesmoke
+}
+
+
+form.sign-up-form mat-form-field {
+	width: 100%;
+	margin: auto;
+}
+
+form.sign-up {
+	position: relative;
+	// top: 706px;
+
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+	max-width: 500px;
+	padding: 1em;
+	margin: 0
+}
+
+.field-heading {
+	font-size: 16px;
+	margin-bottom: 1em;
+}
+
+form.sign-up mat-form-field {
+	width: 100%;
+	margin: auto;
+	margin-bottom: 1em
+}
+
+mat-form-field {
+	width: 40%;
+	margin-left: 5%;
+}
+
+.error,
+strong.required.error {
+	color: #f44336
+}
+
+.field-heading.feedback {
+	margin: 1em 0
+}
+
+.info,
+.info-wrapper {
+	padding: 0.2em 0 1em 0;
+	line-height: 14px;
+}
+
+#telephoneFieldWrapper.mat-tel-field .mdc-form-field-flex>div {
+	position: relative;
+	display: flex !important;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+mat-radio-group {
+	margin-bottom: 0.2em;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.radio-group {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-bottom: 1em;
+}
+
+.radio-button.type {
+	margin-bottom: 1em;
+}
+
+
+
+.mdc-form-field>label {
+	font-size: 16px !important;
+}
+
+.button-wrapper {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 5%;
+	justify-content: space-around;
+}
+
+button {
+	width: 40%;
+}
+
+button.ok {
+	background-color: #99CC33;
+}
+
+.mat-mdc-dialog-content {
+	// max-height: 80vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.custom-field-wrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: stretch;
+	gap: 4px;
+	padding: 0.2rem 0.1rem;
+}
+
+label input {
+	height: 56px;
+	font-size: 1rem;
+	border: unset;
+	border-radius: 4px 4px 0 0;
+	background-color: whitesmoke;
+	color: rgba(0, 0, 0, 0.87)
+}
+
+input.tel-field {
+	padding-left: 0.4rem !important;
+	width: 100%;
+	border-bottom: 1px solid black;
+	transition: box-shadow 0.2s ease-out;
+}
+
+input.tel-field::placeholder {
+	padding-left: 0.4rem;
+}
+
+input.tel-field.error::placeholder {
+	color: #f44336
+}
+
+input.dialing-code {
+	padding-right: 0.4rem;
+	text-align: center;
+	width: 2em;
+	background-color: #9aa8b5 !important;
+	border-radius: 4px !important;
+	border: 1px solid #4c6e8e !important
+}
+
+
+input.dialing-code::placeholder {
+	font-size: 10px;
+}
+
+.form-field-custom {
+	gap: 4px;
+	margin-bottom: 12px;
+}
+
+span.error-span {
+	font-size: 12px;
+	color: #f44336;
+	padding-left: 2rem;
+	;
+}
+
+.dialcode-label {
+	width: 26%
+}
+
+.dialcode-label input {
+	width: 80%;
+
+}
+
+.dialcode-label input:focus-visible {
+	outline: none !important;
+	border: unset !important;
+}
+
+.tel-label {
+	width: 100%
+}
+
+.tel-label input {
+	width: 100%;
+	padding: 0.1rem;
+	box-shadow: 0 0.5px 0 0 black;
+}
+
+.tel-label input:hover {
+	background-color: rgba(0, 0, 0, .11);
+}
+
+.tel-label input:focus-visible {
+	outline: unset;
+	border-bottom: unset;
+	box-shadow: 0 2px 0 0 #5e35b1;
+	background-color: rgba(0, 0, 0, .11)
+}
+
+
+span.info {
+	font-size: 12px;
+}
+
+.login-dialog {}
+
+mat-radio-button.radio-button.type>div.mdc-form-field {
+	align-items: flex-start !important;
+}

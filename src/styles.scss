@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+@import '/node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+html,
+body {
+	height: 100vh;
+	overflow-y: hidden;
+}
+
+body {
+	margin: 0;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+	-webkit-font-smoothing: antialiased;
+	// -moz-osx-font-smoothing: grayscale;
+	// text-rendering: optimizeLegibility;
+
+}
+
+.cdk-global-scrollblock {
+	overflow: hidden;
+}
+
+// ::-webkit-scrollbar {
+// 	display: none
+// }
