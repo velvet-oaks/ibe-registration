@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RegistrationComponent } from 'src/app/registration/registration.component';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
 	selector: 'app-dialog',
@@ -21,6 +22,7 @@ export class DialogComponent implements OnInit {
 		public dialogRef: MatDialogRef<DialogComponent>,
 		private dialog: MatDialog,
 
+		private dialogService: DialogService,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {}
 
@@ -31,6 +33,9 @@ export class DialogComponent implements OnInit {
 			width: '60vw',
 			data: this.data
 		});
+	}
+	emitSuccess(): void {
+		this.dialogRef.close('success');
 	}
 
 	onClose(): void {

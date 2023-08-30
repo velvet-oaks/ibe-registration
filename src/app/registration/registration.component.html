@@ -162,6 +162,7 @@
 							name="dialcode"
 							[readonly]="disabledDialingCode"
 							class="dialing-code"
+							(focusout)="displayConcatNumber()"
 							[class.error]="
 								signUpForm.get('dialingCode').invalid &&
 								signUpForm.get('dialingCode').touched
@@ -183,6 +184,7 @@
 							matInput
 							formControlName="tel_phone"
 							name="tel_phone"
+							(focusout)="displayConcatNumber()"
 							[class.error]="
 								(signUpForm.get('tel_phone').hasError('pattern') ||
 									signUpForm.get('tel_phone').hasError('required')) &&
@@ -306,7 +308,13 @@
 					Please tell us how you feel about giving feedback. Tick the box most
 					relevant to you</span
 				>
-				<mat-radio-button class="radio-button feedback"
+				<mat-radio-button
+					class="radio-button feedback"
+					*ngFor="let feedback of feedbacks"
+					[value]="feedback.value"
+					>{{ feedback.message }}</mat-radio-button
+				>
+				<!-- <mat-radio-button class="radio-button feedback"
 					>I’m not sure please include me in research, but give me the chance to
 					unsubscribe
 				</mat-radio-button>
@@ -325,7 +333,7 @@
 				</mat-radio-button>
 				<mat-radio-button class="radio-button feedback"
 					>I will not give feedback and do not wish to be asked
-				</mat-radio-button>
+				</mat-radio-button> -->
 				<div class="info-wrapper">
 					<span class="info"
 						>Please respond to this question with confidence that we will never
@@ -358,6 +366,7 @@
 			<button
 				class="ok"
 				mat-flat-button
+				[disabled]="this.signUpForm.invalid"
 				color="success"
 				(click)="submitForm()"
 				cdkFocusInitial>
@@ -370,5 +379,11 @@
 				Cancel
 			</button>
 		</div>
+		<br />
+		<span
+			*ngIf="this.signUpForm.touched && this.signUpForm.invalid"
+			[class.error]="this.signUpForm.touched && this.signUpForm.invalid"
+			>You must fill in all the fields.</span
+		>
 	</div>
 </div>

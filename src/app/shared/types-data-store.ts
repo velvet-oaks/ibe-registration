@@ -2,8 +2,8 @@ import { AccountType } from './typeModel';
 
 export const accountTypes: AccountType[] = [
 	{
-		name: 'BRONZE BASIC',
-		message: 'personal use or when no publication of results needed',
+		name: 'BEX BRONZE',
+		message: 'FREE personal use or when no publication of results needed',
 		typeCode: 'bexbronze'
 	},
 	{

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ComponentFactoryResolver } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
 	AbstractControl,
 	FormBuilder,
@@ -18,27 +18,29 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { UsersService } from 'src/app/services/users.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
+import { RegistrationService } from '../services/registration.service';
 import { DialogService } from '../services/dialog.service';
 import { environment } from 'src/environments/environment';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { DialogComponent } from 'src/app/general-components/dialog/dialog.component';
 import { RevisedCountryModel } from 'src/app/shared/revisedCountryModel';
 import { revisedCountryData } from 'src/app/shared/revisedCountryData';
 import { countries } from 'src/app/shared/country-data-store';
 import { Country } from 'src/app/shared/countryModel';
 import { AccountType } from 'src/app/shared/typeModel';
 import { accountTypes } from 'src/app/shared/types-data-store';
+import { FeedbackModel } from '../shared/feedbackModel';
+import { feedbacks } from '../shared/feedbackOptions';
 // import { cities } from 'src/app/shared/cities-data-store';
 import { CityModel } from 'src/app/shared/cityModel';
 import { UsageModel } from 'src/app/shared/usageModel';
 import { usageList } from 'src/app/shared/usage-list';
 
-export interface DialogData {
-	type: string;
-	username: string;
-	password: string;
-	loginType: string;
-}
+// export interface DialogData {
+// 	type: string;
+// 	username: string;
+// 	password: string;
+// 	loginType: string;
+// }
 export class MyErrorStateMatcher implements ErrorStateMatcher {
 	isErrorState(
 		control: FormControl | null,
@@ -61,7 +63,9 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 // LoginSignupDialogComponent
 export class RegistrationComponent implements OnInit {
 	// public cities: CityModel[] = cities;
-
+	public feedbacks: FeedbackModel[] = feedbacks;
+	public accountTypes: AccountType[] = accountTypes;
+	public revisedCountries: RevisedCountryModel[] = revisedCountryData;
 	public cityNames: string[] = [];
 	public citySearchText: string = '';
 	public filteredCities: string[] = [];
@@ -91,14 +95,13 @@ export class RegistrationComponent implements OnInit {
 		};
 	}
 
-	public accountTypes: AccountType[] = accountTypes;
-	public revisedCountries: RevisedCountryModel[] = revisedCountryData;
 	// public cityNames: [] = [];
 	// public citySearchText: string = '';
 	// public filteredCities: string[] = [];
 
 	constructor(
 		private dialogService: DialogService,
+		private registrationService: RegistrationService,
 		// public dialogRef: MatDialogRef<RegistrationComponent>,
 		// @Inject(MAT_DIALOG_DATA) public data: DialogData,
 		private fb: FormBuilder,
@@ -186,7 +189,7 @@ export class RegistrationComponent implements OnInit {
 		name: ['', [Validators.required]],
 		first_name: ['', [Validators.required]],
 		last_name: ['', [Validators.required]],
-		username: ['', [Validators.required]],
+		// username: ['', [Validators.required]],
 		type: ['', [Validators.required]],
 		email: ['', [Validators.required, Validators.email]],
 		tel_phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
@@ -205,19 +208,49 @@ export class RegistrationComponent implements OnInit {
 	matcher = new MyErrorStateMatcher();
 
 	onNoClick(): void {
-		this.dialogService.closeDialog();
+		this.signUpForm.reset();
+	}
+
+	displayConcatNumber() {
+		const form = this.signUpForm;
+		const dialCode = form.get('dialingCode').value;
+		const telNumber = form.get('tel_phone').value;
+		const concatNumber = this.concatDialingAndTel(dialCode, telNumber);
+		console.log('concatenated Number: ', concatNumber);
+	}
+
+	private concatDialingAndTel(dialingCode: string, telNumber: string) {
+		return dialingCode + telNumber;
 	}
 
 	submitForm() {
-		const dialogConfig: MatDialogConfig = {
-			width: '400px',
-			data: {
-				title: 'SUCCESS',
-				message:
-					'GAME CODE successfully created. You will receive an Email to the Email address provided with your account details'
-			}
-		};
-		const dialogRef = this.dialogService.openDialog(DialogComponent, dialogConfig);
-		dialogRef.afterClosed().subscribe(result => {});
+		if (this.signUpForm.valid) {
+			// attempt to send sign up form to api
+			this.registrationService
+				.createRegistration(this.signUpForm)
+				.subscribe(responseData => {
+					if (responseData.err) {
+						console.log('Error: ', responseData.err);
+						this.dialogService
+							.openDialog('registrationFail')
+							.afterClosed()
+							.subscribe(result => {
+								if (result === 'success') {
+									this.signUpForm.reset();
+								}
+							});
+					} else {
+						this.dialogService
+							.openDialog('registrationSuccess')
+							.afterClosed()
+							.subscribe(result => {
+								if (result === 'success') {
+									this.signUpForm.reset();
+								}
+							});
+					}
+				});
+			this.signUpForm.markAllAsTouched();
+		}
 	}
 }
