@@ -133,6 +133,8 @@ export class RegistrationComponent implements OnInit {
 					this.signUpForm.get('dialingCode').setValue(matchedCountry.dial_code);
 				}
 			});
+
+		console.log('ORIGIN :', environment.ORIGIN);
 	}
 
 	findValueInData<T>(selectedValue: any, dataStore: any[], searchField: string): T {
@@ -252,5 +254,16 @@ export class RegistrationComponent implements OnInit {
 				});
 			this.signUpForm.markAllAsTouched();
 		}
+	}
+
+	sendTest() {
+		const user = this.registrationService.testRegistration;
+		this.registrationService.createRegistration(user).subscribe(response => {
+			if (response.err) {
+				console.log('error registering user with api', response.err);
+			} else {
+				console.log('Success sendign to api');
+			}
+		});
 	}
 }

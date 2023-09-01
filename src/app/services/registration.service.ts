@@ -14,7 +14,7 @@ export class RegistrationService implements OnInit {
 		this.testTel
 	);
 
-	private testRegistration = {
+	public testRegistration = {
 		firstName: 'Rob',
 		lastName: 'Shelford',
 		type: 'bexbronze',
@@ -60,28 +60,29 @@ export class RegistrationService implements OnInit {
 
 	// Creater User
 	createRegistration(formData: any): Observable<any> {
-		const dialingCode = formData.value.dial_code;
-		const telNumber = formData.value.tel_phone;
-		const internationalTelNumber = this.formatTelephone(dialingCode, telNumber);
+		// const dialingCode = formData.value.dial_code;
+		// const telNumber = formData.value.tel_phone;
+		// const internationalTelNumber = this.formatTelephone(dialingCode, telNumber);
 
-		let newRegistration = {
-			firstName: formData.value.first_name,
-			lastName: formData.value.last_name,
-			type: formData.value.type,
-			email: formData.value.email,
-			internationalTelNumber: internationalTelNumber,
-			directorKey: formData.value.password,
-			gameCode: formData.value.slot,
-			country: formData.value.country,
-			city: formData.value.city,
-			usage: formData.value.usage,
-			howHeard: formData.value.howHeard,
-			feedback: formData.value.feedback,
-			comments: formData.value.comments
-		};
+		// let newRegistration = {
+		// 	firstName: formData.value.first_name,
+		// 	lastName: formData.value.last_name,
+		// 	type: formData.value.type,
+		// 	email: formData.value.email,
+		// 	internationalTelNumber: internationalTelNumber,
+		// 	directorKey: formData.value.password,
+		// 	gameCode: formData.value.slot,
+		// 	country: formData.value.country,
+		// 	city: formData.value.city,
+		// 	usage: formData.value.usage,
+		// 	howHeard: formData.value.howHeard,
+		// 	feedback: formData.value.feedback,
+		// 	comments: formData.value.comments
+		// };
 		return this.http.post<{ message: string; err: any; registeredUser: any }>(
-			environment.API_URL + '/auth',
-			newRegistration
+			environment.API_URL + '/register',
+			// newRegistration
+			formData
 		);
 	}
 }
