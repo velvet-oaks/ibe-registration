@@ -84,25 +84,6 @@
 					}}<span class="info"><br />{{ accountType.message }}<br /></span
 				></mat-radio-button>
 			</mat-radio-group>
-			<mat-form-field>
-				<mat-label>Choose subscription type</mat-label>
-				<mat-select
-					formControlName="type"
-					matInput
-					[class.error]="
-						signUpForm.get('type').hasError('required') &&
-						signUpForm.get('type').touched
-					">
-					<mat-option
-						*ngFor="let accountType of accountTypes"
-						value="{{ accountType.typeCode }}">
-						{{ accountType.name }}
-					</mat-option>
-				</mat-select>
-				<mat-error *ngIf="signUpForm.controls.type.errors?.required">
-					Type is <strong>required</strong>
-				</mat-error>
-			</mat-form-field>
 
 			<!-- City -->
 			<mat-form-field>
@@ -212,13 +193,13 @@
 				<input
 					type="text"
 					matInput
-					formControlName="slot"
+					formControlName="gameCode"
 					[errorStateMatcher]="matcher"
 					placeholder="Ex. 1234" />
-				<mat-error *ngIf="signUpForm.controls.slot.errors?.required">
+				<mat-error *ngIf="signUpForm.controls.gameCode.errors?.required">
 					Slot is <strong>required</strong>
 				</mat-error>
-				<mat-error *ngIf="signUpForm.controls.slot.errors">
+				<mat-error *ngIf="signUpForm.controls.gameCode.errors">
 					Valid Slot must be <strong>letters and numbers only</strong>
 				</mat-error>
 				<mat-error *ngIf=""></mat-error>
@@ -229,10 +210,15 @@
 			<mat-form-field>
 				<mat-label>Director's Key</mat-label>
 				<input
-					type="password"
+					[type]="hide ? 'password' : 'text'"
 					matInput
 					formControlName="password"
 					[errorStateMatcher]="matcher" />
+				<mat-icon
+					matSuffix
+					(click)="hide = !hide">
+					{{ hide ? 'visibility_off' : 'visibility' }}
+				</mat-icon>
 				<mat-error *ngIf="signUpForm.controls.password.errors?.minlength">
 					Director's Key Needs to be
 					<strong>
@@ -247,10 +233,15 @@
 			<mat-form-field>
 				<mat-label>Repeat Director's Key</mat-label>
 				<input
-					type="password"
+					[type]="hide ? 'password' : 'text'"
 					matInput
 					formControlName="password_confirm"
 					[errorStateMatcher]="matcher" />
+				<mat-icon
+					matSuffix
+					(click)="hide = !hide">
+					{{ hide ? 'visibility_off' : 'visibility' }}
+				</mat-icon>
 				<mat-error
 					*ngIf="signUpForm.controls.password_confirm.errors?.matchValidator">
 					Director's Key Does Not
@@ -419,10 +410,10 @@
 					<li *ngIf="signUpForm.get('tel_phone').hasError('invalid')">
 						Telephone Invalid
 					</li>
-					<li *ngIf="signUpForm.get('slot').hasError('required')">
+					<li *ngIf="signUpForm.get('gameCode').hasError('required')">
 						Game Code Required
 					</li>
-					<li *ngIf="signUpForm.get('slot').hasError('invalid')">
+					<li *ngIf="signUpForm.get('gameCode').hasError('invalid')">
 						Game Code Invalid
 					</li>
 					<li *ngIf="signUpForm.get('password').hasError('required')">
@@ -450,10 +441,18 @@
 			</div>
 		</div>
 	</div>
-	<button
-		mat-flat-button
-		color="accent"
-		(click)="sendTest()">
-		send test
-	</button>
+	<div class="button-wrapper">
+		<button
+			mat-flat-button
+			color="accent"
+			(click)="sendTest()">
+			send test
+		</button>
+		<button
+			mat-flat-button
+			color="accent"
+			(click)="dialCodeTest()">
+			dial code test
+		</button>
+	</div>
 </div>

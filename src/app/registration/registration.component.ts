@@ -110,10 +110,12 @@ export class RegistrationComponent implements OnInit {
 				this.matchValidator('password')
 			]),
 			country: new FormControl('', [Validators.required]),
-			slot: new FormControl('', [Validators.pattern('^[a-zA-Z0-9]*$')]),
+			gameCode: new FormControl('', [Validators.pattern('^[a-zA-Z0-9]*$')]),
 			dialingCode: new FormControl(''),
-			// prettier-ignore
-			city: new FormControl('',[Validators.required, Validators.pattern('^[a-zA-Z]*$')]),
+			city: new FormControl('', [
+				Validators.required,
+				Validators.pattern('^[a-zA-Z ]*$')
+			]),
 			usage: new FormControl('', [Validators.required]),
 			comments: new FormControl(''),
 			howHeard: new FormControl('', [Validators.required]),
@@ -121,6 +123,8 @@ export class RegistrationComponent implements OnInit {
 		});
 		console.log(this.signUpForm);
 	}
+
+	// Class Methods
 
 	ngOnInit(): void {
 		this.signUpForm
@@ -168,38 +172,16 @@ export class RegistrationComponent implements OnInit {
 	toggleVisibility() {
 		this.hidePassword = !this.hidePassword;
 	}
-	selectedTab: string = 'slot';
 
-	slotForm = this.fb.group({
-		slot: ['', [Validators.required]],
-		password: ['', [Validators.required]]
-	});
-	usernameForm = this.fb.group({
-		user_name: ['', [Validators.required]],
-		password: ['', [Validators.required]]
-	});
+	// selectedTab: string = 'slot';
 
-	// signUpForm = this.fb.group({
-	// 	// name: ['', [Validators.required]],
-	// 	first_name: ['', [Validators.required]],
-	// 	last_name: ['', [Validators.required]],
-	// 	// username: ['', [Validators.required]],
-	// 	type: ['', [Validators.required]],
-	// 	email: ['', [Validators.required, Validators.email]],
-	// 	tel_phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
-	// 	password: ['', [Validators.required, Validators.minLength(4)]],
-	// 	password_confirm: ['', [Validators.required, this.matchValidator('password')]],
-	// 	country: ['', [Validators.required]],
-	// 	slot: ['', [Validators.pattern('^[a-zA-Z0-9]*$')]],
-	// 	dialingCode: [''],
-	// 	city: new FormControl([
-	// 		'',
-	// 		[Validators.required, Validators.pattern('^a-zA-Z*$')]
-	// 	]),
-	// 	usage: ['', [Validators.required]],
-	// 	comments: [''],
-	// 	howHeard: ['', [Validators.required]],
-	// 	feedback: ['', [Validators.required]]
+	// slotForm = this.fb.group({
+	// 	slot: ['', [Validators.required]],
+	// 	password: ['', [Validators.required]]
+	// });
+	// usernameForm = this.fb.group({
+	// 	user_name: ['', [Validators.required]],
+	// 	password: ['', [Validators.required]]
 	// });
 
 	matcher = new MyErrorStateMatcher();
@@ -223,7 +205,19 @@ export class RegistrationComponent implements OnInit {
 	submitForm() {
 		if (this.signUpForm.valid) {
 			const formData = this.signUpForm.value;
-			console.log('formData: ',formData)
+
+			// Format the international telephone number
+
+			formData.internationalTelNumber = this.registrationService.formatTelephone(
+				formData.dialingCode,
+				formData.tel_phone
+			);
+
+			// Remove the individual dialingCode and tel_phone proeprties
+			delete formData.dialingCode;
+			delete formData.tel_phone;
+
+			console.log('formData after mutation: ', formData);
 			// attempt to send sign up form to api
 			this.registrationService
 				.createRegistration(formData)
@@ -262,7 +256,33 @@ export class RegistrationComponent implements OnInit {
 
 		this.registrationService.gameCodeTest();
 		const user = this.registrationService.testRegistration;
+
 		this.registrationService.createRegistration(user).subscribe(response => {
+			if (response.err) {
+				console.log('error registering user with api', response.err);
+			} else {
+				console.log('Success sendign to api');
+			}
+		});
+	}
+	dialCodeTest() {
+		console.log(this.signUpForm);
+
+		this.registrationService.gameCodeTest();
+		let formData = this.registrationService.testWithDialCode;
+
+		formData.internationalTelNumber = this.registrationService.formatTelephone(
+			formData.dialingCode,
+			formData.tel_phone
+		);
+
+		// Remove the individual dialingCode and tel_phone proeprties
+		delete formData.dialingCode;
+		delete formData.tel_phone;
+
+		console.log('formData after mutation: ', formData);
+
+		this.registrationService.createRegistration(formData).subscribe(response => {
 			if (response.err) {
 				console.log('error registering user with api', response.err);
 			} else {

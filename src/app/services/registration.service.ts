@@ -30,6 +30,39 @@ export class RegistrationService implements OnInit {
 		comments: 'this is a new comment to test'
 	};
 
+	public testWithDialCode: {
+		firstName: string;
+		lastName: string;
+		type: string;
+		email: string;
+		internationalTelNumber?: string;
+		dialingCode: string;
+		tel_phone: string;
+		directorKey: string;
+		gameCode: string;
+		country: string;
+		city: string;
+		usage: string;
+		howHeard: string;
+		feedback: string;
+		comments: string;
+	} = {
+		firstName: 'Jack',
+		lastName: 'Shelford',
+		type: 'bexbronze',
+		email: 'robert.shelford@googlemail.com',
+		dialingCode: '+44',
+		tel_phone: '01245455455',
+		directorKey: '',
+		gameCode: 'InternationalNumber',
+		country: 'United Kingdom',
+		city: 'London',
+		usage: 'personal',
+		howHeard: 'test',
+		feedback: 'Yes, publish',
+		comments: 'this is a new comment to test'
+	};
+
 	public testCounter: number = 0;
 
 	constructor(private http: HttpClient) {}
@@ -48,7 +81,7 @@ export class RegistrationService implements OnInit {
 		console.log(this.testRegistration.gameCode);
 	}
 
-	private formatTelephone(dialingCode: string, telNumber: string): string {
+	public formatTelephone(dialingCode: string, telNumber: string): string {
 		dialingCode = dialingCode.replace(/^0+/, '');
 		telNumber = telNumber.replace(/^0+/, '');
 
