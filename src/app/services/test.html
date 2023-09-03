@@ -1,0 +1,62 @@
+				<li *ngIf="signUpForm.get('usage').hasError('invalid')">Country Code Invalid</li>
+				<div
+				class="error-summary"
+				*ngIf="isFormInvalid && signUpForm.dirty">
+				<ul>
+					<li *ngIf="signUpForm.controls.first_name.errors?.required">
+						First Name Required
+					</li>
+					<!-- <li *ngIf="signUpForm.controls.first_name.errors?.invalid">
+						First Name Invalid
+					</li> -->
+					<li *ngIf="signUpForm.controls.last_name.errors?.required">
+						Last Name Required
+					</li>
+					<!-- <li *ngIf="signUpForm.get('lastName').hasError('invalid')">
+						Last Name Invalid
+					</li> -->
+					<li *ngIf="signUpForm.controls.email.error?.required">Email Required</li>
+					<li *ngIf="signUpForm.controls.email.error?.invalid">Email Invalid</li>
+					<li *ngIf="signUpForm.controls.type.error?.required">Type Required</li>
+					<li *ngIf="signUpForm.get('city').hasError('required')">City Invalid</li>
+					<li *ngIf="signUpForm.get('city').hasError('invalid')">City Required</li>
+					<li *ngIf="signUpForm.get('country').hasError('required')">
+						Country Required
+					</li>
+					<li *ngIf="signUpForm.get('country').hasError('invalid')">
+						Country Invalid
+					</li>
+
+					<li *ngIf="signUpForm.get('tel_phone').hasError('required')">
+						Telephone Required
+					</li>
+					<li *ngIf="signUpForm.get('tel_phone').hasError('invalid')">
+						Telephone Invalid
+					</li>
+					<li *ngIf="signUpForm.get('slot').hasError('required')">
+						Game Code Required
+					</li>
+					<li *ngIf="signUpForm.get('slot').hasError('invalid')">
+						Game Code Invalid
+					</li>
+					<li *ngIf="signUpForm.get('password').hasError('required')">
+						Director's Key Required
+					</li>
+					<li *ngIf="signUpForm.get('password').hasError('invalid')">
+						Director's Key Invalid
+					</li>
+					<li *ngIf="signUpForm.get('password_confirm').hasError('required')">
+						Director's Keys Do Not Match
+					</li>
+					<li *ngIf="signUpForm.get('password_confirm').hasError('invalid')">
+						Director's Keys Do Not Match
+					</li>
+					<li *ngIf="signUpForm.get('usage').hasError('required')">Usage Required</li>
+					<li *ngIf="signUpForm.get('feedback').hasError('required')">
+						Please Provide Feedback Choice
+					</li>
+					<li *ngIf="signUpForm.get('howHeard').hasError('required')">
+						Please Let Us Know How You heard About Us
+					</li>
+				</ul>
+			</div>

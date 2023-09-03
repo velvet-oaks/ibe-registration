@@ -149,7 +149,7 @@ mat-radio-group {
 	display: flex;
 	align-items: center;
 	gap: 5%;
-	justify-content: space-around;
+	justify-content: space-between;
 }
 
 button {
@@ -274,6 +274,25 @@ span.info {
 
 .login-dialog {}
 
+.bottom-section {
+	width: 80%;
+	display: flex;
+	flex-direction: column;
+	gap: 1em
+}
+
 mat-radio-button.radio-button.type>div.mdc-form-field {
 	align-items: flex-start !important;
+}
+
+.error-summary {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+ul {
+	list-style: none;
+	padding-left: 0
 }

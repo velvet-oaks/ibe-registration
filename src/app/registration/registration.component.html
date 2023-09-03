@@ -18,7 +18,7 @@
 					formControlName="first_name"
 					[errorStateMatcher]="matcher"
 					placeholder="Ex. John Doe" />
-				<mat-error *ngIf="signUpForm.controls.first_name.errors?.required">
+				<mat-error *ngIf="signUpForm.get('first_name').hasError('required')">
 					First name <strong>required</strong>
 				</mat-error>
 			</mat-form-field>
@@ -84,7 +84,7 @@
 					}}<span class="info"><br />{{ accountType.message }}<br /></span
 				></mat-radio-button>
 			</mat-radio-group>
-			<!-- <mat-form-field>
+			<mat-form-field>
 				<mat-label>Choose subscription type</mat-label>
 				<mat-select
 					formControlName="type"
@@ -102,7 +102,7 @@
 				<mat-error *ngIf="signUpForm.controls.type.errors?.required">
 					Type is <strong>required</strong>
 				</mat-error>
-			</mat-form-field> -->
+			</mat-form-field>
 
 			<!-- City -->
 			<mat-form-field>
@@ -114,16 +114,16 @@
 				<span
 					class="error-span"
 					*ngIf="
-						signUpForm.get('tel_phone').hasError('pattern') &&
-						signUpForm.get('tel_phone').touched
+						signUpForm.get('city').hasError('pattern') &&
+						signUpForm.get('city').touched
 					">
 					City is <strong>invalid</strong>
 				</span>
 				<span
 					class="error-span"
 					*ngIf="
-						signUpForm.get('tel_phone').hasError('required') &&
-						signUpForm.get('tel_phone').touched
+						signUpForm.get('city').hasError('valid') &&
+						signUpForm.get('city').touched
 					">
 					City is <strong>required</strong>
 				</span>
@@ -163,10 +163,6 @@
 							[readonly]="disabledDialingCode"
 							class="dialing-code"
 							(focusout)="displayConcatNumber()"
-							[class.error]="
-								signUpForm.get('dialingCode').invalid &&
-								signUpForm.get('dialingCode').touched
-							"
 							placeholder="" />
 					</label>
 					<label
@@ -274,7 +270,6 @@
 						class="radio-button usage"
 						*ngFor="let usage of usageList"
 						[value]="usage.value"
-						[checked]="usage.checked"
 						[class.error]="
 							signUpForm.get('usage').hasError('required') &&
 							signUpForm.get('usage').touched
@@ -360,31 +355,105 @@
 					*ngIf="signUpForm.controls.howHeard.errors?.required"></mat-error>
 			</mat-form-field>
 		</form>
-		<div
-			class="button-wrapper"
-			mat-dialog-actions>
-			<button
-				class="ok"
-				mat-flat-button
-				[disabled]="this.signUpForm.invalid"
-				color="success"
-				(click)="submitForm()"
-				cdkFocusInitial>
-				Ok
-			</button>
-			<button
-				mat-flat-button
-				color="warn"
-				(click)="onNoClick()">
-				Cancel
-			</button>
-		</div>
 		<br />
-		<span
-			*ngIf="this.signUpForm.touched && this.signUpForm.invalid"
-			[class.error]="this.signUpForm.touched && this.signUpForm.invalid"
-			>You must fill in all the fields.</span
-		>
+
+		<div class="bottom-section">
+			<div
+				class="button-wrapper"
+				mat-dialog-actions>
+				<button
+					class="ok"
+					mat-flat-button
+					[disabled]="this.signUpForm.invalid"
+					color="success"
+					(click)="submitForm()"
+					cdkFocusInitial>
+					Ok
+				</button>
+				<button
+					mat-flat-button
+					color="warn"
+					(click)="onNoClick()">
+					Cancel
+				</button>
+			</div>
+
+			<div class="error-summary">
+				<span
+					*ngIf="this.signUpForm.touched && this.signUpForm.invalid"
+					[class.error]="this.signUpForm.touched && this.signUpForm.invalid"
+					>Please correct the following:</span
+				>
+				<ul
+					class="error-summary"
+					[class.error]="isFormInvalid && signUpForm.dirty"
+					*ngIf="isFormInvalid && signUpForm.dirty">
+					<li *ngIf="signUpForm.get('first_name').hasError('required')">
+						First Name Required
+					</li>
+					<li *ngIf="signUpForm.get('first_name').hasError('invalid')">
+						First Name Invalid
+					</li>
+					<li *ngIf="signUpForm.get('last_name').hasError('required')">
+						Last Name Required
+					</li>
+					<li *ngIf="signUpForm.get('last_name').hasError('invalid')">
+						Last Name Invalid
+					</li>
+					<li *ngIf="signUpForm.get('email').hasError('required')">
+						Email Required
+					</li>
+					<li *ngIf="signUpForm.get('email').hasError('invalid')">Email Invalid</li>
+					<li *ngIf="signUpForm.get('type').hasError('required')">Type Required</li>
+					<li *ngIf="signUpForm.get('city').hasError('invalid')">City Required</li>
+					<li *ngIf="signUpForm.get('country').hasError('required')">
+						Country Required
+					</li>
+					<li *ngIf="signUpForm.get('country').hasError('invalid')">
+						Country Invalid
+					</li>
+
+					<li *ngIf="signUpForm.get('tel_phone').hasError('required')">
+						Telephone Required
+					</li>
+					<li *ngIf="signUpForm.get('tel_phone').hasError('invalid')">
+						Telephone Invalid
+					</li>
+					<li *ngIf="signUpForm.get('slot').hasError('required')">
+						Game Code Required
+					</li>
+					<li *ngIf="signUpForm.get('slot').hasError('invalid')">
+						Game Code Invalid
+					</li>
+					<li *ngIf="signUpForm.get('password').hasError('required')">
+						Director's Key Required
+					</li>
+					<li *ngIf="signUpForm.get('password').hasError('invalid')">
+						Director's Key Invalid
+					</li>
+					<li *ngIf="signUpForm.get('password_confirm').hasError('required')">
+						Director's Keys Do Not Match
+					</li>
+					<li *ngIf="signUpForm.get('password_confirm').hasError('invalid')">
+						Director's Keys Do Not Match
+					</li>
+					<li *ngIf="signUpForm.get('usage').hasError('required')">
+						Usage Required
+					</li>
+					<li *ngIf="signUpForm.get('feedback').hasError('required')">
+						Please Provide Feedback Choice
+					</li>
+					<li *ngIf="signUpForm.get('howHeard').hasError('required')">
+						Please Let Us Know How You heard About Us
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
-	<button mat-flat-button color="accent" (click)="sendTest()">send test</button>
+	<button
+		mat-flat-button
+		color="accent"
+		(click)="sendTest()">
+		send test
+	</button>
 </div>

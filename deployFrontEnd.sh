@@ -13,10 +13,10 @@ if [ -z "$project_name" ]; then
 fi
 
 # Construct the destination path
-destination_path="rob@18.170.248.104:/home/apps/$project_name/"
+destination_path="rob@13.41.104.238:/home/apps/$project_name/"
 
 # Run rsync over SSH
-rsync -avz --update --exclude "*.sh" --exclude "*.md" -e "ssh" "$source_path" "$destination_path"
+rsync -avz --update --exclude "*.sh" --exclude "*.md" -e "ssh -i ~/.ssh/personal_database.pem" "$source_path" "$destination_path"
 
 # Check rsync exit status
 if [ $? -eq 0 ]; then

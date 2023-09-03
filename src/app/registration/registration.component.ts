@@ -3,6 +3,7 @@ import {
 	AbstractControl,
 	FormBuilder,
 	FormControl,
+	FormGroup,
 	FormGroupDirective,
 	NgForm,
 	ValidatorFn,
@@ -15,32 +16,22 @@ import {
 	MatDialogConfig
 } from '@angular/material/dialog';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { UsersService } from 'src/app/services/users.service';
-import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
+
 import { RegistrationService } from '../services/registration.service';
 import { DialogService } from '../services/dialog.service';
 import { environment } from 'src/environments/environment';
+import { RegistrationForm } from './registrationModel';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RevisedCountryModel } from 'src/app/shared/revisedCountryModel';
 import { revisedCountryData } from 'src/app/shared/revisedCountryData';
-import { countries } from 'src/app/shared/country-data-store';
-import { Country } from 'src/app/shared/countryModel';
 import { AccountType } from 'src/app/shared/typeModel';
 import { accountTypes } from 'src/app/shared/types-data-store';
 import { FeedbackModel } from '../shared/feedbackModel';
 import { feedbacks } from '../shared/feedbackOptions';
-// import { cities } from 'src/app/shared/cities-data-store';
 import { CityModel } from 'src/app/shared/cityModel';
 import { UsageModel } from 'src/app/shared/usageModel';
 import { usageList } from 'src/app/shared/usage-list';
 
-// export interface DialogData {
-// 	type: string;
-// 	username: string;
-// 	password: string;
-// 	loginType: string;
-// }
 export class MyErrorStateMatcher implements ErrorStateMatcher {
 	isErrorState(
 		control: FormControl | null,
@@ -71,6 +62,7 @@ export class RegistrationComponent implements OnInit {
 	public filteredCities: string[] = [];
 	public usageList: UsageModel[] = usageList;
 	public data: { type: string } = { type: 'signUp' };
+	public signUpForm: FormGroup;
 
 	// types = ['bexbronze', 'bexsilver', 'bexgold', ''];
 	unqiueUserError: any = false;
@@ -95,21 +87,40 @@ export class RegistrationComponent implements OnInit {
 		};
 	}
 
-	// public cityNames: [] = [];
-	// public citySearchText: string = '';
-	// public filteredCities: string[] = [];
-
 	constructor(
 		private dialogService: DialogService,
 		private registrationService: RegistrationService,
-		// public dialogRef: MatDialogRef<RegistrationComponent>,
-		// @Inject(MAT_DIALOG_DATA) public data: DialogData,
 		private fb: FormBuilder,
-		private authService: AuthService,
-		private userService: UsersService,
-		private http: HttpClient,
 		public dialog: MatDialog
-	) {}
+	) {
+		this.signUpForm = this.fb.group({
+			// name: ['', [Validators.required]],
+			first_name: new FormControl('', [Validators.required]),
+			last_name: new FormControl('', [Validators.required]),
+			// username: ['', [Validators.required]],
+			type: new FormControl('', [Validators.required]),
+			email: new FormControl('', [Validators.required, Validators.email]),
+			tel_phone: new FormControl('', [
+				Validators.required,
+				Validators.pattern('[- +()0-9]+')
+			]),
+			password: new FormControl('', [Validators.required, Validators.minLength(4)]),
+			password_confirm: new FormControl('', [
+				Validators.required,
+				this.matchValidator('password')
+			]),
+			country: new FormControl('', [Validators.required]),
+			slot: new FormControl('', [Validators.pattern('^[a-zA-Z0-9]*$')]),
+			dialingCode: new FormControl(''),
+			// prettier-ignore
+			city: new FormControl('',[Validators.required, Validators.pattern('^[a-zA-Z]*$')]),
+			usage: new FormControl('', [Validators.required]),
+			comments: new FormControl(''),
+			howHeard: new FormControl('', [Validators.required]),
+			feedback: new FormControl('', [Validators.required])
+		});
+		console.log(this.signUpForm);
+	}
 
 	ngOnInit(): void {
 		this.signUpForm
@@ -154,25 +165,6 @@ export class RegistrationComponent implements OnInit {
 		}
 	}
 
-	// openDialog(message: string) {
-	// 	// if (this.dialogRef && this.dialogRef.componentInstance) {
-	// 	if (this.isDialogOpen) {
-	// 		return;
-	// 	}
-	// 	this.isDialogOpen = true;
-
-	// 	const dialogRef = this.dialog.open(DialogComponent, {
-	// 		width: '300px',
-	// 		data: { message }
-	// 	});
-
-	// 	dialogRef.afterClosed().subscribe(() => {
-	// 		// this.dialogRef = null;
-	// 		this.isDialogOpen = false;
-	// 		console.log('dialog closed');
-	// 	});
-	// }
-
 	toggleVisibility() {
 		this.hidePassword = !this.hidePassword;
 	}
@@ -187,25 +179,28 @@ export class RegistrationComponent implements OnInit {
 		password: ['', [Validators.required]]
 	});
 
-	signUpForm = this.fb.group({
-		name: ['', [Validators.required]],
-		first_name: ['', [Validators.required]],
-		last_name: ['', [Validators.required]],
-		// username: ['', [Validators.required]],
-		type: ['', [Validators.required]],
-		email: ['', [Validators.required, Validators.email]],
-		tel_phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
-		password: ['', [Validators.required, Validators.minLength(4)]],
-		password_confirm: ['', [Validators.required, this.matchValidator('password')]],
-		country: ['', [Validators.required]],
-		slot: ['', [Validators.pattern('^[a-zA-Z0-9]*$')]],
-		dialingCode: [''],
-		city: ['', [Validators.required]],
-		usage: ['', [Validators.required]],
-		comments: [''],
-		howHeard: ['', [Validators.required]],
-		feedback: ['', [Validators.required]]
-	});
+	// signUpForm = this.fb.group({
+	// 	// name: ['', [Validators.required]],
+	// 	first_name: ['', [Validators.required]],
+	// 	last_name: ['', [Validators.required]],
+	// 	// username: ['', [Validators.required]],
+	// 	type: ['', [Validators.required]],
+	// 	email: ['', [Validators.required, Validators.email]],
+	// 	tel_phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+	// 	password: ['', [Validators.required, Validators.minLength(4)]],
+	// 	password_confirm: ['', [Validators.required, this.matchValidator('password')]],
+	// 	country: ['', [Validators.required]],
+	// 	slot: ['', [Validators.pattern('^[a-zA-Z0-9]*$')]],
+	// 	dialingCode: [''],
+	// 	city: new FormControl([
+	// 		'',
+	// 		[Validators.required, Validators.pattern('^a-zA-Z*$')]
+	// 	]),
+	// 	usage: ['', [Validators.required]],
+	// 	comments: [''],
+	// 	howHeard: ['', [Validators.required]],
+	// 	feedback: ['', [Validators.required]]
+	// });
 
 	matcher = new MyErrorStateMatcher();
 
@@ -227,9 +222,11 @@ export class RegistrationComponent implements OnInit {
 
 	submitForm() {
 		if (this.signUpForm.valid) {
+			const formData = this.signUpForm.value;
+			console.log('formData: ',formData)
 			// attempt to send sign up form to api
 			this.registrationService
-				.createRegistration(this.signUpForm)
+				.createRegistration(formData)
 				.subscribe(responseData => {
 					if (responseData.err) {
 						console.log('Error: ', responseData.err);
@@ -256,7 +253,14 @@ export class RegistrationComponent implements OnInit {
 		}
 	}
 
+	get isFormInvalid(): boolean {
+		return this.signUpForm.invalid;
+	}
+
 	sendTest() {
+		console.log(this.signUpForm);
+
+		this.registrationService.gameCodeTest();
 		const user = this.registrationService.testRegistration;
 		this.registrationService.createRegistration(user).subscribe(response => {
 			if (response.err) {

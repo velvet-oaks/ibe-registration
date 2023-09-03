@@ -15,21 +15,22 @@ export class RegistrationService implements OnInit {
 	);
 
 	public testRegistration = {
-		firstName: 'Rob',
+		firstName: 'Jack',
 		lastName: 'Shelford',
 		type: 'bexbronze',
 		email: 'robert.shelford@googlemail.com',
 		internationalTelNumber: this.formatTelephone(this.testDialCode, this.testTel),
-		directorKey: 'pass',
-		gameCode: 'newGameCode',
+		directorKey: '',
+		gameCode: 'dfdfsdfhdfshdfshdf',
 		country: 'United Kingdom',
 		city: 'London',
 		usage: 'personal',
-		howHeard: 'word of moouth',
+		howHeard: 'test',
 		feedback: 'Yes, publish',
-		comments:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam mattis, orci at gravida bibendum, orci neque eleifend purus, eget iaculis est tellus vitae nisl. Etiam tincidunt eu lacus in scelerisque. Ut metus sem, egestas ut arcu sit amet, tincidunt aliquam ipsum. Donec magna nunc, interdum quis elit ut, efficitur tristique nulla. '
+		comments: 'this is a new comment to test'
 	};
+
+	public testCounter: number = 0;
 
 	constructor(private http: HttpClient) {}
 
@@ -38,6 +39,13 @@ export class RegistrationService implements OnInit {
 	ngOnInit(): void {
 		console.log('API_URL: ', environment.API_URL);
 		console.log('test formatted international number: ', this.formattedTel);
+		if (this.testCounter > 0) {
+			this.testCounter++;
+		} else {
+			this.testCounter;
+		}
+		this.testRegistration.gameCode = `newTest_00${this.testCounter}`;
+		console.log(this.testRegistration.gameCode);
 	}
 
 	private formatTelephone(dialingCode: string, telNumber: string): string {
@@ -58,8 +66,19 @@ export class RegistrationService implements OnInit {
 		return formattedNumber;
 	}
 
+	public gameCodeTest(): void {
+		if (this.testCounter >= 0) {
+			this.testCounter++;
+		}
+		this.testRegistration.gameCode = `test_code_00${this.testCounter}`;
+		console.log(`test game code is ${this.testRegistration.gameCode}`);
+	}
+
 	// Creater User
 	createRegistration(formData: any): Observable<any> {
+		const registrationData = formData;
+		console.log(registrationData);
+
 		// const dialingCode = formData.value.dial_code;
 		// const telNumber = formData.value.tel_phone;
 		// const internationalTelNumber = this.formatTelephone(dialingCode, telNumber);
@@ -82,7 +101,7 @@ export class RegistrationService implements OnInit {
 		return this.http.post<{ message: string; err: any; registeredUser: any }>(
 			environment.API_URL + '/register',
 			// newRegistration
-			formData
+			registrationData
 		);
 	}
 }
