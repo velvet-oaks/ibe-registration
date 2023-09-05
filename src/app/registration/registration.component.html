@@ -15,10 +15,14 @@
 				<input
 					type="text"
 					matInput
-					formControlName="first_name"
+					formControlName="firstName"
 					[errorStateMatcher]="matcher"
 					placeholder="Ex. John Doe" />
-				<mat-error *ngIf="signUpForm.get('first_name').hasError('required')">
+				<mat-error
+					*ngIf="
+						signUpForm.controls.firstName.errors?.rquired &&
+						signUpForm.controls.firstName.touched
+					">
 					First name <strong>required</strong>
 				</mat-error>
 			</mat-form-field>
@@ -27,10 +31,14 @@
 				<input
 					type="text"
 					matInput
-					formControlName="last_name"
+					formControlName="lastName"
 					[errorStateMatcher]="matcher"
 					placeholder="Ex. John Doe" />
-				<mat-error *ngIf="signUpForm.controls.last_name.errors?.required">
+				<mat-error
+					*ngIf="
+						signUpForm.controls.lastName.errors?.required &&
+						signUpForm.controls.lastName.touched
+					">
 					Last name <strong>required</strong>
 				</mat-error>
 			</mat-form-field>
@@ -196,14 +204,18 @@
 					formControlName="gameCode"
 					[errorStateMatcher]="matcher"
 					placeholder="Ex. 1234" />
+				<div class="info-wrapper">
+					<span class="info"
+						>Please choose a GAME CODE with 3-8 simple characters and no spaces. (If
+						the GAME CODE already exists we will add a '01' to it.)</span
+					>
+				</div>
 				<mat-error *ngIf="signUpForm.controls.gameCode.errors?.required">
-					Slot is <strong>required</strong>
+					GAME CODE is <strong>required</strong>
 				</mat-error>
 				<mat-error *ngIf="signUpForm.controls.gameCode.errors">
-					Valid Slot must be <strong>letters and numbers only</strong>
+					GAME CODE must be <strong>letters and numbers only</strong>
 				</mat-error>
-				<mat-error *ngIf=""></mat-error>
-				<mat-hint>Choose or a GAME CODE, or one will be chosen for you</mat-hint>
 			</mat-form-field>
 			<br />
 			<!-- Director's Key & Repeat Director's Key -->
@@ -212,21 +224,28 @@
 				<input
 					[type]="hide ? 'password' : 'text'"
 					matInput
-					formControlName="password"
+					formControlName="directorKey"
 					[errorStateMatcher]="matcher" />
 				<mat-icon
 					matSuffix
 					(click)="hide = !hide">
 					{{ hide ? 'visibility_off' : 'visibility' }}
 				</mat-icon>
-				<mat-error *ngIf="signUpForm.controls.password.errors?.minlength">
+				<div class="info-wrapper">
+					<span class="info">
+						This key will be used often in session, so please choose a short
+						memorable key
+					</span>
+				</div>
+
+				<mat-error *ngIf="signUpForm.controls.directorKey.errors?.minlength">
 					Director's Key Needs to be
 					<strong>
-						{{ signUpForm.controls.password.errors?.minlength.requiredLength }} char
-						long
+						{{ signUpForm.controls.directorKey.errors?.minlength.requiredLength }}
+						char long
 					</strong>
 				</mat-error>
-				<mat-error *ngIf="signUpForm.controls.password.errors?.required">
+				<mat-error *ngIf="signUpForm.controls.directorKey.errors?.required">
 					Director's Key is <strong>required</strong>
 				</mat-error>
 			</mat-form-field>
@@ -235,7 +254,7 @@
 				<input
 					[type]="hide ? 'password' : 'text'"
 					matInput
-					formControlName="password_confirm"
+					formControlName="directorKeyConfirm"
 					[errorStateMatcher]="matcher" />
 				<mat-icon
 					matSuffix
@@ -243,11 +262,11 @@
 					{{ hide ? 'visibility_off' : 'visibility' }}
 				</mat-icon>
 				<mat-error
-					*ngIf="signUpForm.controls.password_confirm.errors?.matchValidator">
+					*ngIf="signUpForm.controls.directorKeyConfirm.errors?.matchValidator">
 					Director's Key Does Not
 					<strong>Match</strong>
 				</mat-error>
-				<mat-error *ngIf="signUpForm.controls.password_confirm.errors?.required">
+				<mat-error *ngIf="signUpForm.controls.directorKeyConfirm.errors?.required">
 					Director's Key is <strong>required</strong>
 				</mat-error>
 			</mat-form-field>
@@ -289,8 +308,8 @@
 				class="radio-group"
 				formControlName="feedback">
 				<span class="field-heading feedback"
-					>We are contantly developing our products to ensure our customers love our
-					products and customer service so what you think really matters to us.
+					>We are constantly developing our products to ensure our customers love
+					our products and customer service so what you think really matters to us.
 					Please tell us how you feel about giving feedback. Tick the box most
 					relevant to you</span
 				>
@@ -342,8 +361,9 @@
 				<textarea
 					matInput
 					formControlName="howHeard"></textarea>
-				<mat-error
-					*ngIf="signUpForm.controls.howHeard.errors?.required"></mat-error>
+				<mat-error *ngIf="signUpForm.controls.howHeard.errors?.required">
+					Please make a choice</mat-error
+				>
 			</mat-form-field>
 		</form>
 		<br />
@@ -379,18 +399,18 @@
 					class="error-summary"
 					[class.error]="isFormInvalid && signUpForm.dirty"
 					*ngIf="isFormInvalid && signUpForm.dirty">
-					<li *ngIf="signUpForm.get('first_name').hasError('required')">
+					<li *ngIf="signUpForm.get('firstName').hasError('required')">
 						First Name Required
 					</li>
-					<li *ngIf="signUpForm.get('first_name').hasError('invalid')">
+					<!-- <li *ngIf="signUpForm.get('firstName').hasError('invalid')">
 						First Name Invalid
-					</li>
-					<li *ngIf="signUpForm.get('last_name').hasError('required')">
+					</li> -->
+					<li *ngIf="signUpForm.get('lastName').hasError('required')">
 						Last Name Required
 					</li>
-					<li *ngIf="signUpForm.get('last_name').hasError('invalid')">
+					<!-- <li *ngIf="signUpForm.get('lastName').hasError('invalid')">
 						Last Name Invalid
-					</li>
+					</li> -->
 					<li *ngIf="signUpForm.get('email').hasError('required')">
 						Email Required
 					</li>
@@ -416,16 +436,16 @@
 					<li *ngIf="signUpForm.get('gameCode').hasError('invalid')">
 						Game Code Invalid
 					</li>
-					<li *ngIf="signUpForm.get('password').hasError('required')">
+					<li *ngIf="signUpForm.get('directorKey').hasError('required')">
 						Director's Key Required
 					</li>
-					<li *ngIf="signUpForm.get('password').hasError('invalid')">
+					<li *ngIf="signUpForm.get('directorKey').hasError('invalid')">
 						Director's Key Invalid
 					</li>
-					<li *ngIf="signUpForm.get('password_confirm').hasError('required')">
+					<li *ngIf="signUpForm.get('directorKeyConfirm').hasError('required')">
 						Director's Keys Do Not Match
 					</li>
-					<li *ngIf="signUpForm.get('password_confirm').hasError('invalid')">
+					<li *ngIf="signUpForm.get('directorKeyConfirm').hasError('invalid')">
 						Director's Keys Do Not Match
 					</li>
 					<li *ngIf="signUpForm.get('usage').hasError('required')">
@@ -441,7 +461,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="button-wrapper">
+	<!-- <div class="button-wrapper">
 		<button
 			mat-flat-button
 			color="accent"
@@ -450,9 +470,15 @@
 		</button>
 		<button
 			mat-flat-button
+			(click)="counter()"
+			color="accent">
+			Increment {{ registrationService.testCounter }}
+		</button>
+		<button
+			mat-flat-button
 			color="accent"
 			(click)="dialCodeTest()">
 			dial code test
 		</button>
-	</div>
+	</div> -->
 </div>

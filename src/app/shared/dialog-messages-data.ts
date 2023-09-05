@@ -8,7 +8,8 @@ export const dialogData: DialogModel[] = [
 		data: {
 			title: 'SUCCESS',
 			message:
-				'GAME CODE successfully created. You will receive an Email to the Email address provided with your account details'
+				'was successfully created. You will receive an Email to the Email address provided with your account details',
+			gameCode: ''
 		}
 	},
 	{
@@ -17,7 +18,8 @@ export const dialogData: DialogModel[] = [
 		data: {
 			title: 'REGISTRATION FAILED',
 			message:
-				'It seems there has been an error registering. Please try again or contact..'
+				'It seems there has been an error registering. Please try again or contact..',
+			gameCode: ''
 		}
 	}
 ];

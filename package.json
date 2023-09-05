@@ -6,6 +6,7 @@
 		"start": "ng serve",
 		"build": "ng build",
 		"build2": "npm i && ng build --configuration production --base-href /ibe-registration/",
+		"build-dev": "npm i && ng build --configuration production --base-href /dev-ibe-registration/",
 		"watch": "ng build --watch --configuration development",
 		"test": "ng test"
 	},

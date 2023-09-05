@@ -14,13 +14,15 @@ export class RegistrationService implements OnInit {
 		this.testTel
 	);
 
+	public testCounter: number = 0;
+
 	public testRegistration = {
 		firstName: 'Jack',
 		lastName: 'Shelford',
 		type: 'bexbronze',
 		email: 'robert.shelford@googlemail.com',
 		internationalTelNumber: this.formatTelephone(this.testDialCode, this.testTel),
-		directorKey: '',
+		directorKey: 'test',
 		gameCode: 'dfdfsdfhdfshdfshdf',
 		country: 'United Kingdom',
 		city: 'London',
@@ -53,8 +55,8 @@ export class RegistrationService implements OnInit {
 		email: 'robert.shelford@googlemail.com',
 		dialingCode: '+44',
 		tel_phone: '01245455455',
-		directorKey: '',
-		gameCode: 'InternationalNumber',
+		directorKey: 'test',
+		gameCode: '',
 		country: 'United Kingdom',
 		city: 'London',
 		usage: 'personal',
@@ -62,8 +64,6 @@ export class RegistrationService implements OnInit {
 		feedback: 'Yes, publish',
 		comments: 'this is a new comment to test'
 	};
-
-	public testCounter: number = 0;
 
 	constructor(private http: HttpClient) {}
 
@@ -82,7 +82,7 @@ export class RegistrationService implements OnInit {
 	}
 
 	public formatTelephone(dialingCode: string, telNumber: string): string {
-		dialingCode = dialingCode.replace(/^0+/, '');
+		// dialingCode = dialingCode.replace(/^0+/, '');
 		telNumber = telNumber.replace(/^0+/, '');
 
 		// Handle Argentina Numbers - add 9 between country code and number, and remove
@@ -99,12 +99,21 @@ export class RegistrationService implements OnInit {
 		return formattedNumber;
 	}
 
-	public gameCodeTest(): void {
+	public incrementCounter() {
 		if (this.testCounter >= 0) {
 			this.testCounter++;
 		}
+	}
+
+	public gameCodeTest(): void {
+		this.incrementCounter();
 		this.testRegistration.gameCode = `test_code_00${this.testCounter}`;
 		console.log(`test game code is ${this.testRegistration.gameCode}`);
+	}
+	public dialCodeTest(): void {
+		this.incrementCounter();
+		this.testWithDialCode.gameCode = `intlNumberTest01${this.testCounter}`;
+		console.log(`test game code is ${this.testWithDialCode.gameCode}`);
 	}
 
 	// Creater User
@@ -112,25 +121,6 @@ export class RegistrationService implements OnInit {
 		const registrationData = formData;
 		console.log(registrationData);
 
-		// const dialingCode = formData.value.dial_code;
-		// const telNumber = formData.value.tel_phone;
-		// const internationalTelNumber = this.formatTelephone(dialingCode, telNumber);
-
-		// let newRegistration = {
-		// 	firstName: formData.value.first_name,
-		// 	lastName: formData.value.last_name,
-		// 	type: formData.value.type,
-		// 	email: formData.value.email,
-		// 	internationalTelNumber: internationalTelNumber,
-		// 	directorKey: formData.value.password,
-		// 	gameCode: formData.value.slot,
-		// 	country: formData.value.country,
-		// 	city: formData.value.city,
-		// 	usage: formData.value.usage,
-		// 	howHeard: formData.value.howHeard,
-		// 	feedback: formData.value.feedback,
-		// 	comments: formData.value.comments
-		// };
 		return this.http.post<{ message: string; err: any; registeredUser: any }>(
 			environment.API_URL + '/register',
 			// newRegistration

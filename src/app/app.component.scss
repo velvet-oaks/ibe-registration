@@ -1,11 +1,13 @@
 .container {
-
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background: linear-gradient(90deg, rgb(205, 0, 129) 0%, rgb(189, 0, 205) 100%);
-	max-height: 100vh;
-	height: 100vh;
-	max-width: 90vw;
+
+	max-width: 100%;
 	overflow-y: hidden;
-	padding: 5%
+	padding: 3%;
+	// padding-bottom: 2%
 }
 
 .tab-box {
@@ -15,19 +17,6 @@
 	margin-left: 60px;
 }
 
-// .mat-tab-label{
-//   background: green;
-//   color:white;
-// }
-// /* focus style */
-// .mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-group.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus{
-//   background: red;
-// }
-// /* ink bar style */
-// .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
-//   background: yellow;
-//   height: 10px;
-// }
 
 mat-drawer-container {
 	height: 100vh;

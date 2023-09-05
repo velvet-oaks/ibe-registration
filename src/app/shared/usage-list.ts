@@ -1,7 +1,11 @@
 import { UsageModel } from './usageModel';
 
 export const usageList = [
-	{ value: 'personal', label: '(team games and with friends only)', checked: true },
+	{
+		value: 'personal',
+		label: 'Personal (team games and with friends only)',
+		checked: true
+	},
 	{
 		value: 'bridgeClub',
 		label: 'At the Bridge Club - Duplicates/ Individuals Only',

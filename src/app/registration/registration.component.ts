@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import {
 	AbstractControl,
 	FormBuilder,
@@ -16,7 +16,7 @@ import {
 	MatDialogConfig
 } from '@angular/material/dialog';
 import { ErrorStateMatcher } from '@angular/material/core';
-
+import { SharedDataService } from '../services/shared-data.service';
 import { RegistrationService } from '../services/registration.service';
 import { DialogService } from '../services/dialog.service';
 import { environment } from 'src/environments/environment';
@@ -52,7 +52,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 // LoginSignupDialogComponent
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnChanges {
 	// public cities: CityModel[] = cities;
 	public feedbacks: FeedbackModel[] = feedbacks;
 	public accountTypes: AccountType[] = accountTypes;
@@ -64,12 +64,11 @@ export class RegistrationComponent implements OnInit {
 	public data: { type: string } = { type: 'signUp' };
 	public signUpForm: FormGroup;
 
-	// types = ['bexbronze', 'bexsilver', 'bexgold', ''];
 	unqiueUserError: any = false;
 	hidePassword: boolean = true;
 	hide = true;
 	loginType: string = '';
-	private isDialogOpen: boolean = false;
+	// private isDialogOpen: boolean = false;
 	dialingCodeValue?: any;
 
 	selectedCountry?: RevisedCountryModel;
@@ -88,15 +87,16 @@ export class RegistrationComponent implements OnInit {
 	}
 
 	constructor(
+		private sharedDataService: SharedDataService,
 		private dialogService: DialogService,
-		private registrationService: RegistrationService,
+		public registrationService: RegistrationService,
 		private fb: FormBuilder,
 		public dialog: MatDialog
 	) {
 		this.signUpForm = this.fb.group({
 			// name: ['', [Validators.required]],
-			first_name: new FormControl('', [Validators.required]),
-			last_name: new FormControl('', [Validators.required]),
+			firstName: new FormControl('', [Validators.required]),
+			lastName: new FormControl('', [Validators.required]),
 			// username: ['', [Validators.required]],
 			type: new FormControl('', [Validators.required]),
 			email: new FormControl('', [Validators.required, Validators.email]),
@@ -104,8 +104,11 @@ export class RegistrationComponent implements OnInit {
 				Validators.required,
 				Validators.pattern('[- +()0-9]+')
 			]),
-			password: new FormControl('', [Validators.required, Validators.minLength(4)]),
-			password_confirm: new FormControl('', [
+			directorKey: new FormControl('', [
+				Validators.required,
+				Validators.minLength(4)
+			]),
+			directorKeyConfirm: new FormControl('', [
 				Validators.required,
 				this.matchValidator('password')
 			]),
@@ -152,6 +155,8 @@ export class RegistrationComponent implements OnInit {
 		console.log('ORIGIN :', environment.ORIGIN);
 	}
 
+	ngOnChanges(changes: SimpleChanges): void {}
+
 	findValueInData<T>(selectedValue: any, dataStore: any[], searchField: string): T {
 		const matchedItem = dataStore.find(item => item.name === selectedValue);
 		return matchedItem ? matchedItem[searchField] : null;
@@ -173,17 +178,6 @@ export class RegistrationComponent implements OnInit {
 		this.hidePassword = !this.hidePassword;
 	}
 
-	// selectedTab: string = 'slot';
-
-	// slotForm = this.fb.group({
-	// 	slot: ['', [Validators.required]],
-	// 	password: ['', [Validators.required]]
-	// });
-	// usernameForm = this.fb.group({
-	// 	user_name: ['', [Validators.required]],
-	// 	password: ['', [Validators.required]]
-	// });
-
 	matcher = new MyErrorStateMatcher();
 
 	onNoClick(): void {
@@ -204,7 +198,8 @@ export class RegistrationComponent implements OnInit {
 
 	submitForm() {
 		if (this.signUpForm.valid) {
-			const formData = this.signUpForm.value;
+			const formData = { ...this.signUpForm.value };
+			console.log(formData);
 
 			// Format the international telephone number
 
@@ -233,10 +228,15 @@ export class RegistrationComponent implements OnInit {
 								}
 							});
 					} else {
+						const gameCode = responseData.user.slot;
+						this.sharedDataService.updateGameCode(gameCode);
 						this.dialogService
+
 							.openDialog('registrationSuccess')
 							.afterClosed()
 							.subscribe(result => {
+								console.log('subscription result is: ', result);
+
 								if (result === 'success') {
 									this.signUpForm.reset();
 								}
@@ -259,18 +259,32 @@ export class RegistrationComponent implements OnInit {
 
 		this.registrationService.createRegistration(user).subscribe(response => {
 			if (response.err) {
-				console.log('error registering user with api', response.err);
+				console.log(
+					'error registering testRegistration user with api',
+					response.err
+				);
+				this.dialogService
+					.openDialog('registrationFail')
+					.afterClosed()
+					.subscribe(result => {
+						if (result === 'success') {
+							this.signUpForm.reset();
+						}
+					});
 			} else {
-				console.log('Success sendign to api');
+				console.log('Success sending to api');
 			}
 		});
+		this.signUpForm.reset();
 	}
 	dialCodeTest() {
+		// console.log(this.signUpForm);
+
+		this.registrationService.dialCodeTest();
 		console.log(this.signUpForm);
-
-		this.registrationService.gameCodeTest();
-		let formData = this.registrationService.testWithDialCode;
-
+		console.log(this.registrationService.testCounter);
+		const formData = { ...this.registrationService.testWithDialCode };
+		console.log(formData.tel_phone, formData.dialingCode);
 		formData.internationalTelNumber = this.registrationService.formatTelephone(
 			formData.dialingCode,
 			formData.tel_phone
@@ -284,10 +298,30 @@ export class RegistrationComponent implements OnInit {
 
 		this.registrationService.createRegistration(formData).subscribe(response => {
 			if (response.err) {
-				console.log('error registering user with api', response.err);
+				console.log(
+					'error registering testWithDialCode user with api',
+					response.err
+				);
 			} else {
-				console.log('Success sendign to api');
+				const gameCode = response.user.slot;
+				this.sharedDataService.updateGameCode(gameCode);
+				console.log('subscription response: ', response);
+				console.log('Success sending to api');
+				this.dialogService
+					.openDialog('registrationSuccess')
+					.afterClosed()
+					.subscribe(result => {
+						if (result === 'success') {
+							this.signUpForm.reset();
+						}
+					});
 			}
 		});
+		// this.signUpForm.reset();
+	}
+
+	counter() {
+		this.registrationService.incrementCounter();
+		console.log('counter value: ', this.registrationService.testCounter);
 	}
 }

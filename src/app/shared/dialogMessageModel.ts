@@ -4,5 +4,6 @@ export interface DialogModel {
 	data: {
 		title: string;
 		message: string;
+		gameCode: string
 	};
 }
