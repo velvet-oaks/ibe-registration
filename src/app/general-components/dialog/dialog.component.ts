@@ -38,6 +38,10 @@ export class DialogComponent implements OnInit {
 		this.dialogRef.close('success');
 	}
 
+	emitFailure(): void {
+		this.dialogRef.close('fail');
+	}
+
 	onClose(): void {
 		this.dialogRef.close();
 	}

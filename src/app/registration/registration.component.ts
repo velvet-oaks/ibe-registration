@@ -63,6 +63,7 @@ export class RegistrationComponent implements OnInit, OnChanges {
 	public usageList: UsageModel[] = usageList;
 	public data: { type: string } = { type: 'signUp' };
 	public signUpForm: FormGroup;
+	userEnteredFormValue;
 
 	unqiueUserError: any = false;
 	hidePassword: boolean = true;
@@ -113,7 +114,10 @@ export class RegistrationComponent implements OnInit, OnChanges {
 				this.matchValidator('password')
 			]),
 			country: new FormControl('', [Validators.required]),
-			gameCode: new FormControl('', [Validators.pattern('^[a-zA-Z0-9]*$')]),
+			gameCode: new FormControl('', [
+				Validators.required,
+				Validators.pattern('^[a-zA-Z0-9]*$')
+			]),
 			dialingCode: new FormControl(''),
 			city: new FormControl('', [
 				Validators.required,
@@ -214,35 +218,26 @@ export class RegistrationComponent implements OnInit, OnChanges {
 
 			console.log('formData after mutation: ', formData);
 			// attempt to send sign up form to api
-			this.registrationService
-				.createRegistration(formData)
-				.subscribe(responseData => {
-					if (responseData.err) {
-						console.log('Error: ', responseData.err);
-						this.dialogService
-							.openDialog('registrationFail')
-							.afterClosed()
-							.subscribe(result => {
-								if (result === 'success') {
-									this.signUpForm.reset();
-								}
-							});
-					} else {
-						const gameCode = responseData.user.slot;
-						this.sharedDataService.updateGameCode(gameCode);
-						this.dialogService
+			this.registrationService.createRegistration(formData).subscribe({
+				next: response => {
+					console.log('Success', response);
+					const gameCode = response.user.slot;
+					this.sharedDataService.updateGameCode(gameCode);
+					this.dialogService
+						.openDialog('registrationSuccess')
+						.afterClosed()
+						.subscribe(result => {
+							if (result === 'success') {
+								this.signUpForm.reset();
+							}
+						});
+				},
+				error: error => {
+					console.log('Error is:', error);
 
-							.openDialog('registrationSuccess')
-							.afterClosed()
-							.subscribe(result => {
-								console.log('subscription result is: ', result);
-
-								if (result === 'success') {
-									this.signUpForm.reset();
-								}
-							});
-					}
-				});
+					this.handleResponseError(error);
+				}
+			});
 			this.signUpForm.markAllAsTouched();
 		}
 	}
@@ -251,35 +246,38 @@ export class RegistrationComponent implements OnInit, OnChanges {
 		return this.signUpForm.invalid;
 	}
 
-	sendTest() {
-		console.log(this.signUpForm);
+	// handle response errors
 
-		this.registrationService.gameCodeTest();
-		const user = this.registrationService.testRegistration;
-
-		this.registrationService.createRegistration(user).subscribe(response => {
-			if (response.err) {
-				console.log(
-					'error registering testRegistration user with api',
-					response.err
-				);
-				this.dialogService
-					.openDialog('registrationFail')
-					.afterClosed()
-					.subscribe(result => {
-						if (result === 'success') {
-							this.signUpForm.reset();
-						}
-					});
-			} else {
-				console.log('Success sending to api');
-			}
-		});
-		this.signUpForm.reset();
+	private handleResponseError(error: any): void {
+		if (error.error.slot) {
+			const gameCode = error.error.slot;
+			const initialValue = { ...this.signUpForm.value };
+			this.sharedDataService.updateGameCode(gameCode);
+			this.dialogService
+				.openDialog('registrationFail_GAMECODE')
+				.afterClosed()
+				.subscribe(result => {
+					if (result === 'fail') {
+						this.signUpForm.setValue({ ...initialValue });
+					}
+				});
+		} else {
+			const gameCode = '';
+			this.sharedDataService.updateGameCode(gameCode);
+			this.dialogService
+				.openDialog('registrationFail')
+				.afterClosed()
+				.subscribe(result => {
+					if (result === 'success') {
+						this.signUpForm.reset();
+					}
+				});
+		}
 	}
-	dialCodeTest() {
-		// console.log(this.signUpForm);
 
+	// Debug tests
+
+	dialCodeTest() {
 		this.registrationService.dialCodeTest();
 		console.log(this.signUpForm);
 		console.log(this.registrationService.testCounter);
@@ -296,17 +294,11 @@ export class RegistrationComponent implements OnInit, OnChanges {
 
 		console.log('formData after mutation: ', formData);
 
-		this.registrationService.createRegistration(formData).subscribe(response => {
-			if (response.err) {
-				console.log(
-					'error registering testWithDialCode user with api',
-					response.err
-				);
-			} else {
+		this.registrationService.createRegistration(formData).subscribe({
+			next: response => {
+				console.log('Success', response);
 				const gameCode = response.user.slot;
 				this.sharedDataService.updateGameCode(gameCode);
-				console.log('subscription response: ', response);
-				console.log('Success sending to api');
 				this.dialogService
 					.openDialog('registrationSuccess')
 					.afterClosed()
@@ -315,6 +307,49 @@ export class RegistrationComponent implements OnInit, OnChanges {
 							this.signUpForm.reset();
 						}
 					});
+			},
+			error: error => {
+				console.log('error', error);
+				console.log(error.error.slot);
+				this.sharedDataService.gameCode$;
+				this.handleResponseError(error);
+			}
+		});
+
+		// this.signUpForm.reset();
+	}
+
+	sendTest() {
+		console.log(this.signUpForm);
+
+		this.registrationService.gameCodeTest();
+		const user = this.registrationService.testRegistration;
+
+		this.registrationService.createRegistration(user).subscribe({
+			next: response => {
+				console.log('Success', response);
+				const gameCode = response.user.slot;
+				this.sharedDataService.updateGameCode(gameCode);
+				this.dialogService
+					.openDialog('registrationSuccess')
+					.afterClosed()
+					.subscribe(result => {
+						console.log('result: ', result);
+
+						if (result === 'success') {
+							this.signUpForm.reset();
+						}
+						if(result === 'fail'){
+							console.log('failure');
+
+						}
+					});
+			},
+			error: error => {
+				console.log('error', error);
+				console.log(error.error.slot);
+				this.sharedDataService.gameCode$;
+				this.handleResponseError(error);
 			}
 		});
 		// this.signUpForm.reset();

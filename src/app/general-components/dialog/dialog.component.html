@@ -1,15 +1,37 @@
 <div class="dialog-container">
+	<a href="https://ibescore.com">
+		<img
+			src="assets/images/ibescore.jpeg"
+			alt="IBEScore Logo"
+			srcset="" />
+	</a>
 	<h2>{{ data.title ? data.title : '' }}</h2>
 	<mat-dialog-content>
-		<p class="message">Your GAME CODE</p>
-		<h3>{{data.gameCode}}</h3>
-		<p class="message">{{ data.message }}</p>
+		<div
+			*ngIf="data.gameCode && data.gameCode.length > 1"
+			class="game-code">
+			<p class="message">Your chosen GAME CODE</p>
+			<h3>{{ data.gameCode }}</h3>
+		</div>
+		<div
+			[innerHTML]="data.message"
+			class="message-container"></div>
 	</mat-dialog-content>
 	<mat-dialog-actions align="end">
 		<button
-			mat-button
-			(click)="emitSuccess()">
+			*ngIf="data.title !== 'SUCCESS'"
+			mat-flat-button
+			color="accent"
+			(click)="emitFailure()">
 			Close
 		</button>
+		<a
+			href="https://ibescore.com"
+			class="ok"
+			mat-flat-button
+			color="success"
+			*ngIf="data.title === 'SUCCESS'">
+			IBEScore
+		</a>
 	</mat-dialog-actions>
 </div>

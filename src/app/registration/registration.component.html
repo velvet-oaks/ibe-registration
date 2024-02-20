@@ -1,6 +1,11 @@
 <!-- Sign Up Form -->
 <div class="container">
 	<div class="heading-wrapper">
+		<a href="https://ibescore.com">
+			<img
+				src="assets/images/ibescore.jpeg"
+				alt="IBEScore Logo" />
+		</a>
 		<h1 mat-dialog-title>Register For IBEScore</h1>
 	</div>
 
@@ -206,8 +211,8 @@
 					placeholder="Ex. 1234" />
 				<div class="info-wrapper">
 					<span class="info"
-						>Please choose a GAME CODE with 3-8 simple characters and no spaces. (If
-						the GAME CODE already exists we will add a '01' to it.)</span
+						>Please choose a GAME CODE with 3-8 simple characters and no
+						spaces.</span
 					>
 				</div>
 				<mat-error *ngIf="signUpForm.controls.gameCode.errors?.required">
@@ -319,26 +324,6 @@
 					[value]="feedback.value"
 					>{{ feedback.message }}</mat-radio-button
 				>
-				<!-- <mat-radio-button class="radio-button feedback"
-					>I’m not sure please include me in research, but give me the chance to
-					unsubscribe
-				</mat-radio-button>
-				<mat-radio-button class="radio-button feedback"
-					>YES, I am willing to be contacted for feedback on my usage of IBEScore
-				</mat-radio-button>
-				<mat-radio-button class="radio-button feedback"
-					>YES. I love the App and will be happy to help get the word out to bridge
-					players
-				</mat-radio-button>
-				<mat-radio-button class="radio-button feedback"
-					>YES, I will rate the app in the App stores
-				</mat-radio-button>
-				<mat-radio-button class="radio-button feedback"
-					>YES, I am happy for you to publish my feedback in written endorsements
-				</mat-radio-button>
-				<mat-radio-button class="radio-button feedback"
-					>I will not give feedback and do not wish to be asked
-				</mat-radio-button> -->
 				<div class="info-wrapper">
 					<span class="info"
 						>Please respond to this question with confidence that we will never
@@ -414,6 +399,7 @@
 					<li *ngIf="signUpForm.get('email').hasError('required')">
 						Email Required
 					</li>
+					<li *ngIf="signUpForm.get('email').hasError('invalid')">Email Invalit</li>
 					<li *ngIf="signUpForm.get('email').hasError('invalid')">Email Invalid</li>
 					<li *ngIf="signUpForm.get('type').hasError('required')">Type Required</li>
 					<li *ngIf="signUpForm.get('city').hasError('invalid')">City Required</li>
