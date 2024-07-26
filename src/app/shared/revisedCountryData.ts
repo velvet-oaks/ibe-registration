@@ -385,6 +385,8 @@ export const revisedCountryData: RevisedCountryModel[] = [
 		emoji: '🇸🇻',
 		alphaCode: 'SV'
 	},
+	{ name: 'England', dial_code: '+44', emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', alphaCode: 'EN' },
+
 	{
 		name: 'Equatorial Guinea',
 		dial_code: '+240',
@@ -961,6 +963,7 @@ export const revisedCountryData: RevisedCountryModel[] = [
 		emoji: '🇳🇫',
 		alphaCode: 'NF'
 	},
+
 	{
 		name: 'Northern Mariana Islands',
 		dial_code: '+1670',
@@ -1147,6 +1150,8 @@ export const revisedCountryData: RevisedCountryModel[] = [
 		emoji: '🇸🇦',
 		alphaCode: 'SA'
 	},
+	{ name: 'Scotland', dial_code: '+44', emoji: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', alphaCode: 'SCT' },
+
 	{
 		name: 'Senegal',
 		dial_code: '+221',
@@ -1429,6 +1434,8 @@ export const revisedCountryData: RevisedCountryModel[] = [
 		emoji: '🇻🇮',
 		alphaCode: 'VI'
 	},
+	{ name: 'Wales', dial_code: '+44', emoji: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', alphaCode: 'WAL' },
+
 	{
 		name: 'Wallis and Futuna',
 		dial_code: '+681',
